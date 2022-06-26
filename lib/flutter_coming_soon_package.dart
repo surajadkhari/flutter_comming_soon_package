@@ -18,6 +18,7 @@ class FlutterComingSoonPackage extends StatelessWidget {
           fontSubtitleSize: 14,
           time: 1,
           boxRadius: 10,
+          dataTime: DateTime(2022, 06, 26, 15, 30, 50),
         ),
       ),
     );
@@ -41,7 +42,7 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
       ),
       this.containerHeight = 0.2,
       this.containeWeight = 0.8,
-      this.dataTime = "2022-06-23 12:01:00"})
+      required this.dataTime})
       : super(key: key);
 
   final double sreenH;
@@ -55,7 +56,7 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
   final double containerHeight;
   final double containeWeight;
   int time;
-  final String dataTime;
+  final DateTime dataTime;
 
   @override
   State<FlutterCommingSoonPackageWidget> createState() =>
@@ -63,7 +64,37 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
 }
 
 class _FlutterCommingSoonPackageWidgetState
-    extends State<FlutterCommingSoonPackageWidget> {
+    extends State<FlutterCommingSoonPackageWidget>
+    with SingleTickerProviderStateMixin {
+  late bool animate;
+  late AnimationController _controller;
+
+  int getTime() => widget.dataTime.difference(DateTime.now()).inSeconds + 2;
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: getTime()));
+
+    getTime() >= 0 ? animate = false : true;
+    _controller.addListener(() {
+      if (_controller.isCompleted) {
+        setState(() {
+          animate = false;
+        });
+      }
+    });
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_controller.isAnimating || _controller.isCompleted) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,28 +126,32 @@ class _FlutterCommingSoonPackageWidgetState
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [],
             ),
+            builTimeCard(header: "header")
           ],
         ),
       ),
     );
   }
 
-  Widget builTimeCard({required String time, required String header}) {
+  Widget builTimeCard({required String header}) {
     return Column(
       children: [
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.boxRadius),
-              color: Colors.white),
-          child: Text(time, style: widget.timerStyle),
-        ),
+        // Container(
+        //   alignment: Alignment.center,
+        //   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        //   margin: const EdgeInsets.symmetric(horizontal: 8),
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(widget.boxRadius),
+        //       color: Colors.white),
+        //   child: Text(time, style: widget.timerStyle),
+        // ),
         const SizedBox(
           height: 8,
         ),
         Text(header),
+        LiveCountdown(
+            animation:
+                StepTween(begin: (getTime()), end: 0).animate(_controller))
       ],
     );
   }
@@ -130,6 +165,13 @@ class LiveCountdown extends AnimatedWidget {
   final Animation<int> animation;
   @override
   Widget build(BuildContext context) {
-    return const Text("h");
+    Duration clockTimer = Duration(seconds: animation.value);
+    var timertext =
+        '${clockTimer.inDays.toString()} days:  ${clockTimer.inHours.remainder(24).toString()} hr :${(clockTimer.inMinutes.remainder(60)).toString()} min:'
+        '${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} sec';
+    return Text(
+      "Time remaining:$timertext",
+      style: const TextStyle(color: Colors.white),
+    );
   }
 }
