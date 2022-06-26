@@ -12,13 +12,13 @@ class FlutterComingSoonPackage extends StatelessWidget {
         child: FlutterCommingSoonPackageWidget(
           sreenH: sreenH * 1,
           screenW: screenW,
-          title: "Dashmix",
+          title: "Comming Soon",
           subtitle: "stay tuned,it is comming soons",
           fontTitleSize: 26,
           fontSubtitleSize: 14,
           time: 1,
           boxRadius: 10,
-          dataTime: DateTime(2022, 06, 26, 15, 30, 50),
+          dataTime: DateTime(2022, 06, 30, 15, 30, 50),
         ),
       ),
     );
@@ -126,33 +126,13 @@ class _FlutterCommingSoonPackageWidgetState
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [],
             ),
-            builTimeCard(header: "header")
+            LiveCountdown(
+                animation:
+                    StepTween(begin: (getTime()), end: 0).animate(_controller))
+            // builTimeCard(header: "header"),
           ],
         ),
       ),
-    );
-  }
-
-  Widget builTimeCard({required String header}) {
-    return Column(
-      children: [
-        // Container(
-        //   alignment: Alignment.center,
-        //   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        //   margin: const EdgeInsets.symmetric(horizontal: 8),
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(widget.boxRadius),
-        //       color: Colors.white),
-        //   child: Text(time, style: widget.timerStyle),
-        // ),
-        const SizedBox(
-          height: 8,
-        ),
-        Text(header),
-        LiveCountdown(
-            animation:
-                StepTween(begin: (getTime()), end: 0).animate(_controller))
-      ],
     );
   }
 }
@@ -166,12 +146,75 @@ class LiveCountdown extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
-    var timertext =
-        '${clockTimer.inDays.toString()} days:  ${clockTimer.inHours.remainder(24).toString()} hr :${(clockTimer.inMinutes.remainder(60)).toString()} min:'
-        '${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} sec';
-    return Text(
-      "Time remaining:$timertext",
-      style: const TextStyle(color: Colors.white),
+    String reDays = clockTimer.inDays.toString();
+    String reHours = clockTimer.inHours.remainder(24).toString();
+    String reMinutes = clockTimer.inMinutes.remainder(60).toString();
+    var reSeconds =
+        (clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0');
+
+    // '${clockTimer.inDays.toString()} days:  ${clockTimer.inHours.remainder(24).toString()} hr :${(clockTimer.inMinutes.remainder(60)).toString()} min:'
+    //     '${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} sec';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: Colors.white),
+              child: Text(reDays),
+            ),
+            const Text("Days")
+          ],
+        ),
+
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: Colors.white),
+              child: Text(reHours),
+            ),
+            const Text("Hours")
+          ],
+        ),
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: Colors.white),
+              child: Text(reMinutes),
+            ),
+            const Text("Minutes")
+          ],
+        ),
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: Colors.white),
+              child: Text(reSeconds),
+            ),
+            const Text("seconds")
+          ],
+        ),
+        // Text(
+        //   "Time remaining:$timertext",
+        //   style: const TextStyle(color: Colors.white),
+        // ),
+      ],
     );
   }
 }
