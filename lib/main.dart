@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:package_test/flutter_coming_soon_package.dart';
+import 'package:package_test/hello.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,6 +16,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const FlutterComingSoonPackage());
+        home: TimerApp());
   }
 }

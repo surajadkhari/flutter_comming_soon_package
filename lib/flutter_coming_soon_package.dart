@@ -121,3 +121,15 @@ class _FlutterCommingSoonPackageWidgetState
     );
   }
 }
+
+class LiveCountdown extends AnimatedWidget {
+  const LiveCountdown({
+    Key? key,
+    required this.animation,
+  }) : super(key: key, listenable: animation);
+  final Animation<int> animation;
+  @override
+  Widget build(BuildContext context) {
+    return const Text("h");
+  }
+}
