@@ -13,12 +13,19 @@ class FlutterComingSoonPackage extends StatelessWidget {
           sreenH: sreenH * 1,
           screenW: screenW,
           title: "Comming Soon",
-          subtitle: "stay tuned,it is comming soons",
+          subtitle: "Stay tuned,it is comming soons",
           fontTitleSize: 26,
           fontSubtitleSize: 14,
           time: 1,
           boxRadius: 10,
-          dataTime: DateTime(2022, 06, 30, 15, 30, 50),
+          dataTime: DateTime(2022, 06, 27, 24, 30, 50),
+          dateStyle: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          daysLable: "Days",
+          hourLable: "Hours",
+          minutessLable: "Minuites",
+          secondLable: "Seconds",
+          space: 10,
+          lableStyle: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -42,7 +49,14 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
       ),
       this.containerHeight = 0.2,
       this.containeWeight = 0.8,
-      required this.dataTime})
+      required this.dataTime,
+      required this.dateStyle,
+      required this.daysLable,
+      required this.hourLable,
+      required this.minutessLable,
+      required this.secondLable,
+      required this.space,
+      required this.lableStyle})
       : super(key: key);
 
   final double sreenH;
@@ -57,7 +71,13 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
   final double containeWeight;
   int time;
   final DateTime dataTime;
-
+  final TextStyle dateStyle;
+  final String daysLable;
+  final String hourLable;
+  final String minutessLable;
+  final String secondLable;
+  final double space;
+  final TextStyle lableStyle;
   @override
   State<FlutterCommingSoonPackageWidget> createState() =>
       _FlutterCommingSoonPackageWidgetState();
@@ -127,8 +147,16 @@ class _FlutterCommingSoonPackageWidgetState
               children: const [],
             ),
             LiveCountdown(
-                animation:
-                    StepTween(begin: (getTime()), end: 0).animate(_controller))
+              animation:
+                  StepTween(begin: (getTime()), end: 0).animate(_controller),
+              datestyle: widget.dateStyle,
+              daysLable: widget.daysLable,
+              hourLable: widget.hourLable,
+              minutessLable: widget.minutessLable,
+              secondLable: widget.secondLable,
+              space: widget.space,
+              labletSyle: widget.lableStyle,
+            )
             // builTimeCard(header: "header"),
           ],
         ),
@@ -138,11 +166,25 @@ class _FlutterCommingSoonPackageWidgetState
 }
 
 class LiveCountdown extends AnimatedWidget {
-  const LiveCountdown({
-    Key? key,
-    required this.animation,
-  }) : super(key: key, listenable: animation);
+  const LiveCountdown(
+      {Key? key,
+      required this.datestyle,
+      required this.animation,
+      required this.daysLable,
+      required this.hourLable,
+      required this.minutessLable,
+      required this.secondLable,
+      required this.space,
+      required this.labletSyle})
+      : super(key: key, listenable: animation);
   final Animation<int> animation;
+  final TextStyle datestyle;
+  final String daysLable;
+  final String hourLable;
+  final String minutessLable;
+  final String secondLable;
+  final double space;
+  final TextStyle labletSyle;
   @override
   Widget build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
@@ -151,69 +193,102 @@ class LiveCountdown extends AnimatedWidget {
     String reMinutes = clockTimer.inMinutes.remainder(60).toString();
     var reSeconds =
         (clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0');
-
-    // '${clockTimer.inDays.toString()} days:  ${clockTimer.inHours.remainder(24).toString()} hr :${(clockTimer.inMinutes.remainder(60)).toString()} min:'
-    //     '${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} sec';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Text(reDays),
-            ),
-            const Text("Days")
-          ],
-        ),
-
-        Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Text(reHours),
-            ),
-            const Text("Hours")
-          ],
-        ),
-        Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Text(reMinutes),
-            ),
-            const Text("Minutes")
-          ],
-        ),
-        Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8), color: Colors.white),
-              child: Text(reSeconds),
-            ),
-            const Text("seconds")
-          ],
-        ),
-        // Text(
-        //   "Time remaining:$timertext",
-        //   style: const TextStyle(color: Colors.white),
-        // ),
+        if (reDays != 0)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 40,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
+                child: Text(reDays, style: datestyle),
+              ),
+              SizedBox(
+                height: space,
+              ),
+              Text(daysLable)
+            ],
+          ),
+        if (reHours != 0)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 40,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
+                child: Text(reHours, style: datestyle),
+              ),
+              SizedBox(
+                height: space,
+              ),
+              Text(hourLable)
+            ],
+          ),
+        if (minutessLable != 0)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 80,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
+                child: Text(
+                  reMinutes,
+                  style: datestyle,
+                ),
+              ),
+              SizedBox(
+                height: space,
+              ),
+              Text(minutessLable)
+            ],
+          ),
+        if (reSeconds != 0)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+                width: 80,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white),
+                child: Text(
+                  reSeconds,
+                  style: datestyle,
+                ),
+              ),
+              SizedBox(
+                height: space,
+              ),
+              Text(
+                secondLable,
+                style: labletSyle,
+              )
+            ],
+          ),
       ],
     );
   }
