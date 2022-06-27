@@ -10,8 +10,8 @@ class FlutterComingSoonPackage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: FlutterCommingSoonPackageWidget(
-          sreenH: sreenH * 1,
-          screenW: screenW,
+          sreenH: sreenH * 0.2,
+          screenW: screenW * 1.1,
           title: "Comming Soon",
           subtitle: "Stay tuned,it is comming soons",
           fontTitleSize: 26,
@@ -119,8 +119,8 @@ class _FlutterCommingSoonPackageWidgetState
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14),
-      height: widget.sreenH * widget.containerHeight,
-      width: widget.screenW * widget.containeWeight,
+      height: widget.sreenH,
+      width: widget.screenW,
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(10),
@@ -223,7 +223,7 @@ class LiveCountdown extends AnimatedWidget {
             children: [
               Container(
                 height: 50,
-                width: 40,
+                width: 80,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 margin: const EdgeInsets.symmetric(horizontal: 8),
