@@ -11,14 +11,15 @@ class FlutterComingSoonPackage extends StatelessWidget {
       body: Center(
         child: FlutterCommingSoonPackageWidget(
           sreenH: sreenH * 0.2,
-          screenW: screenW * 1.1,
+          screenW: screenW * 0.7,
+          isContainer: false,
           title: "Comming Soon",
           subtitle: "Stay tuned,it is comming soons",
           fontTitleSize: 26,
           fontSubtitleSize: 14,
           time: 1,
           boxRadius: 10,
-          dataTime: DateTime(2022, 06, 27, 24, 30, 50),
+          dataTime: DateTime(2022, 06, 28, 13, 30, 50),
           dateStyle: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           daysLable: "Days",
           hourLable: "Hours",
@@ -56,7 +57,8 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
       required this.minutessLable,
       required this.secondLable,
       required this.space,
-      required this.lableStyle})
+      required this.lableStyle,
+      required this.isContainer})
       : super(key: key);
 
   final double sreenH;
@@ -78,6 +80,7 @@ class FlutterCommingSoonPackageWidget extends StatefulWidget {
   final String secondLable;
   final double space;
   final TextStyle lableStyle;
+  final bool isContainer;
   @override
   State<FlutterCommingSoonPackageWidget> createState() =>
       _FlutterCommingSoonPackageWidgetState();
@@ -156,6 +159,7 @@ class _FlutterCommingSoonPackageWidgetState
               secondLable: widget.secondLable,
               space: widget.space,
               labletSyle: widget.lableStyle,
+              isContainer: widget.isContainer,
             )
             // builTimeCard(header: "header"),
           ],
@@ -175,7 +179,8 @@ class LiveCountdown extends AnimatedWidget {
       required this.minutessLable,
       required this.secondLable,
       required this.space,
-      required this.labletSyle})
+      required this.labletSyle,
+      required this.isContainer})
       : super(key: key, listenable: animation);
   final Animation<int> animation;
   final TextStyle datestyle;
@@ -185,6 +190,7 @@ class LiveCountdown extends AnimatedWidget {
   final String secondLable;
   final double space;
   final TextStyle labletSyle;
+  final bool isContainer;
   @override
   Widget build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
@@ -194,33 +200,33 @@ class LiveCountdown extends AnimatedWidget {
     var reSeconds =
         (clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0');
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        if (reDays != 0)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isContainer)
               Container(
                 height: 50,
                 width: 40,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                margin: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.white),
                 child: Text(reDays, style: datestyle),
               ),
-              SizedBox(
-                height: space,
-              ),
-              Text(daysLable)
-            ],
-          ),
-        if (reHours != 0)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            Text(reDays, style: datestyle),
+            SizedBox(
+              height: space,
+            ),
+            Text(daysLable)
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isContainer)
               Container(
                 height: 50,
                 width: 80,
@@ -232,16 +238,17 @@ class LiveCountdown extends AnimatedWidget {
                     color: Colors.white),
                 child: Text(reHours, style: datestyle),
               ),
-              SizedBox(
-                height: space,
-              ),
-              Text(hourLable)
-            ],
-          ),
-        if (minutessLable != 0)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            Text(reHours, style: datestyle),
+            SizedBox(
+              height: space,
+            ),
+            Text(hourLable)
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isContainer)
               Container(
                 height: 50,
                 width: 80,
@@ -256,16 +263,20 @@ class LiveCountdown extends AnimatedWidget {
                   style: datestyle,
                 ),
               ),
-              SizedBox(
-                height: space,
-              ),
-              Text(minutessLable)
-            ],
-          ),
-        if (reSeconds != 0)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            Text(
+              reMinutes,
+              style: datestyle,
+            ),
+            SizedBox(
+              height: space,
+            ),
+            Text(minutessLable)
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isContainer)
               Container(
                 height: 50,
                 width: 80,
@@ -280,15 +291,19 @@ class LiveCountdown extends AnimatedWidget {
                   style: datestyle,
                 ),
               ),
-              SizedBox(
-                height: space,
-              ),
-              Text(
-                secondLable,
-                style: labletSyle,
-              )
-            ],
-          ),
+            Text(
+              reSeconds,
+              style: datestyle,
+            ),
+            SizedBox(
+              height: space,
+            ),
+            Text(
+              secondLable,
+              style: labletSyle,
+            )
+          ],
+        ),
       ],
     );
   }
